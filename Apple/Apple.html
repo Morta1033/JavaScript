@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Apple</title>
+    <style>
+        .main_item{
+            color: #fff;
+            background-color: #000;
+            border-radius: 16px;
+            font-size: 20px;
+            margin: 0 10px;
+        }
+        .color_btn{
+            background-color: #fff;
+            border: 2px solid #000;
+            border-radius: 5px;
+            font-size: 20px;
+            margin: 0 10px 50px;
+            padding: 20px;
+            width: 100px;
+            box-sizing: border-box;
+        }
+        .type_btn{
+            background-color: #fff;
+            border: 2px solid #000;
+            border-radius: 5px;
+            font-size: 20px;
+            margin: 0 10px 50px;
+            padding: 20px;
+            width: 100px;
+            box-sizing: border-box;
+        }
+        p{
+            padding: 15px;        
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row  mb-3 d-flex justify-content-center" id="productBtnGroup">
+            <button id="iphone" class="main_item" onclick="Select('iphone')">iPhone</button>
+            <button id="mac" class="main_item" onclick="Select('mac')">Mac</button>
+            <button id="ipad" class="main_item" onclick="Select('ipad')">iPad</button>
+        </div>
+        <div class="row">
+            <!-- <div class="col-12 col-md-6 id="products_img""></div> -->
+            <div class="col-12 col-md-6">
+                <img id="products_img" src="" class="img-fluid" alt="">
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div id="color_txt"></div>
+                <div id="products_color" class="row"></div>
+
+                <div id="type_txt"></div>
+                <div id="products_type" class="row"></div>
+
+                <div id="price_txt"></div>
+                <div id="products_price" class="row"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        var Products = {
+            iphone: {
+                Title: {
+                    name: 'iPhone 11',
+                    pic: 'imgiphone.png'
+                },
+                Colors: [
+                    { color: '綠色', pic: 'iphone_11_green.jpg' },
+                    { color: '黑色', pic: 'iphone_11_black.jpg' },
+                    { color: '紫色', pic: 'iphone_11_purple.jpg' }
+                ],
+                Type: [
+                    { storage: '64G', price: '24,900' },
+                    { storage: '128G', price: '26,900' },
+                    { storage: '256G', price: '30,400' },
+                ]
+            },
+            mac: {
+                Title: {
+                    name: 'MacBook Air',
+                    pic: 'imgmac.png'
+                },
+                Colors: [
+                    { color: '灰色', pic: 'mac_gray.jpg' },
+                    { color: '銀色', pic: 'mac_silver.jpg' }
+                ],
+                Type: [
+                    { storage: '256G', price: '51,300' },
+                    { storage: '512G', price: '57,300' },
+                    { storage: '1T', price: '63,300' },
+                    { storage: '2T', price: '75,300' },
+                ]
+            },
+            ipad: {
+                Title: {
+                    name: 'iPad',
+                    pic: 'imgipad.png'
+                },
+                Colors: [
+                    { color: '灰色', pic: 'ipad_gray.jpg' },
+                    { color: '銀色', pic: 'ipad_silver.jpg' },
+                    { color: '金色', pic: 'ipad_gold.jpg' }
+                ],
+                Type: [
+                    { storage: '32G', price: '10,900' },
+                    { storage: '128G', price: '13,900' }
+                ]
+            }
+        };
+
+        var products_img = document.getElementById('products_img');
+        
+        var color_txt = document.getElementById('color_txt');
+        var products_color = document.getElementById('products_color');
+
+        var type_txt = document.getElementById('type_txt');
+        var products_type = document.getElementById('products_type');
+
+        var price_txt = document.getElementById('price_txt');
+        var products_price = document.getElementById('products_price');
+
+        function Select(item) {
+            products_img.innerHTML = '';
+            color_txt.innerHTML = '';
+            products_color.innerHTML = '';
+            products_type.innerHTML = '';
+            products_price.innerHTML = '';
+            if (item == 'iphone') {
+                products_img.setAttribute('src', Products.iphone.Title.pic)
+                iphoneColor();
+                iphoneType();
+            } else if (item == 'mac') {
+                // products_img.innerHTML = `<img src='${Products.mac.Title.pic}'/>`;
+                products_img.setAttribute('src', Products.mac.Title.pic)
+                macColor();
+                macType();
+            } else if (item == 'ipad') {
+                // products_img.innerHTML = `<img src='${Products.ipad.Title.pic}'/>`;
+                products_img.setAttribute('src', Products.ipad.Title.pic)
+                ipadColor();
+                ipadType();
+            }
+        }
+
+        //顏色按鈕
+        function iphoneColor() {
+            Products.iphone.Colors.forEach(function (element) {
+                // console.log(element + "++++++++++++++++++++++++++");
+                color_txt.innerHTML = "<h2>顏色</h2>"
+                for (const prop in element) {
+                // console.log(prop + "************************");
+                    if (prop == 'color') {
+                        products_color.innerHTML += `<button class="color_btn" onclick="iphoneSelectColor('${element[prop]}')">${element[prop]}</button>`
+                    }
+                }
+            })
+        }
+        function macColor() {
+            Products.mac.Colors.forEach(function (element) {
+                color_txt.innerHTML = "<h2>顏色</h2>"
+                for (const prop in element) {
+                    if (prop == 'color') {
+                        products_color.innerHTML += `<button class="color_btn" onclick="macSelectColor('${element[prop]}')">${element[prop]}</button>`
+                    }
+                }
+            })
+        }
+        function ipadColor() {
+            Products.ipad.Colors.forEach(function (element) {
+                color_txt.innerHTML = "<h2>顏色</h2>"
+                for (const prop in element) {
+                    if (prop == 'color') {
+                        products_color.innerHTML += `<button class="color_btn" onclick="ipadSelectColor('${element[prop]}')">${element[prop]}</button>`
+                    }
+                }
+            })
+        }
+
+
+        //依選擇的顏色出現圖片
+        function iphoneSelectColor(item) {
+            Products.iphone.Colors.forEach(function (element) {
+                if (item == '紫色') {
+                    products_img.setAttribute('src', 'iphone_11_purple.jpg')
+                } else if (item == '黑色') {
+                    // products_img.innerHTML = "<img src='iphone_11_black.jpg'/>";
+                    products_img.setAttribute('src', 'iphone_11_black.jpg')
+
+                } else if (item == '綠色') {
+                    // products_img.innerHTML = "<img src='iphone_11_green.jpg'/>";
+                    products_img.setAttribute('src', 'iphone_11_green.jpg')
+
+                }
+            })
+        }
+        function macSelectColor(item) {
+            Products.mac.Colors.forEach(function (element) {
+                if (item == '銀色') {
+                    // products_img.innerHTML = "<img src='mac_silver.jpg'/>";
+                    products_img.setAttribute('src', 'mac_silver.jpg')
+                } else if (item == '灰色') {
+                    // products_img.innerHTML = "<img src='mac_gray.jpg'/>";
+                    products_img.setAttribute('src', 'mac_gray.jpg')
+
+                }
+            })
+        }
+        function ipadSelectColor(item) {
+            Products.ipad.Colors.forEach(function (element) {
+                if (item == '灰色') {
+                    // products_img.innerHTML = "<img src='ipad_gray.jpg'/>";
+                    products_img.setAttribute('src', 'ipad_gray.jpg')
+                } else if (item == '銀色') {
+                    // products_img.innerHTML = "<img src='ipad_silver.jpg'/>";
+                    products_img.setAttribute('src', 'ipad_silver.jpg')
+                } else if (item == '金色') {
+                    // products_img.innerHTML = "<img src='ipad_gold.jpg'/>";
+                    products_img.setAttribute('src', 'ipad_gold.jpg')
+                }
+            })
+        }
+
+
+
+        //規格按鈕
+        function iphoneType() {
+            Products.iphone.Type.forEach(function (element) {
+                type_txt.innerHTML = "<h2>規格</h2>"
+                for (const prop in element) {
+                    if (prop == 'storage') {
+                        products_type.innerHTML += `<button class="type_btn" onclick="iphoneSelectPrice('${element.price}')">${element[prop]}</button>`
+                    }
+                }
+                price_txt.innerHTML = "<h2>價格</h2>"
+            })
+        }
+        function macType() {
+            Products.mac.Type.forEach(function (element) {
+                type_txt.innerHTML = "<h2>規格</h2>"
+                for (const prop in element) {
+                    if (prop == 'storage') {
+                        products_type.innerHTML += `<button class="type_btn" onclick="macSelectPrice('${element.price}')">${element[prop]}</button>`
+                    }
+                }
+                price_txt.innerHTML = "<h2>價格</h2>"
+            })
+        }
+        function ipadType() {
+            Products.ipad.Type.forEach(function (element) {
+                type_txt.innerHTML = "<h2>規格</h2>"
+                for (const prop in element) {
+                    if (prop == 'storage') {
+                        products_type.innerHTML += `<button class="type_btn" onclick="ipadSelectPrice('${element.price}')">${element[prop]}</button>`
+                    }
+                }
+                price_txt.innerHTML = "<h2>價格</h2>"
+            })
+        }
+
+
+        //依選擇的規格顯示價錢
+        function iphoneSelectPrice(item){
+            // console.log(item + "元");
+            Products.iphone.Type.forEach(function(element) {
+                products_price.innerHTML = `<p class="display-4 font-weight-bolder">NT$${item}</p>`;
+            })
+        }
+        function macSelectPrice(item){
+            Products.mac.Type.forEach(function(element) {
+                products_price.innerHTML = `<p class="display-4 font-weight-bolder">NT$${item}</p>`;
+            })
+        }
+        function ipadSelectPrice(item){
+            Products.ipad.Type.forEach(function(element) {
+                products_price.innerHTML = `<p class="display-4 font-weight-bolder">NT$${item}</p>`;
+            })
+        }
+
+        
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
