@@ -113,13 +113,13 @@ function operate(opr) {
     }
 
 
-    console.log("nLast " + nLast);
-    console.log("bNewNum " + bNewNum);
-    console.log("sLastOpr " + sLastOpr);
-    console.log("sLastPrompt " + sLastPrompt);
-    console.log("result " + result.value);
-    console.log("prompt " + prompt);
-    console.log("************operate************");
+    // console.log("nLast " + nLast);
+    // console.log("bNewNum " + bNewNum);
+    // console.log("sLastOpr " + sLastOpr);
+    // console.log("sLastPrompt " + sLastPrompt);
+    // console.log("result " + result.value);
+    // console.log("prompt " + prompt);
+    // console.log("************operate************");
 }
 
 function inputDecimal() {
