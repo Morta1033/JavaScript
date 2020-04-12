@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>計算機</title>
+    <link rel="stylesheet" href="Calculator.css">
+    <script src="Calculator.js"></script>
+</head>
+
+<body lang="zh" onload="fInit();">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="Cont">
+                    <table align="center" cellpadding="0" cellspacing="0" class="wrap">
+                        <tr class="display-number-box">
+                            <td class="show-num-box" colspan="3">
+                                <div class="show-num">
+                                    <table cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td class="display">
+                                                <input name="text" type="text" id="jsqResult" value="0" maxlength="10"
+                                                    readonly="true" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <!--輸入算式時出現紀錄-->
+                                    <div class="tips_p">
+                                        <div class="display-all">
+                                            <span id="jsqPrompt"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <table class="num_table">
+                                    <tr>
+                                        <td><input type="button" class="num" value="7" onclick="inputNum(this.value)">
+                                        </td>
+                                        <td><input type="button" class="num" value="8" onclick="inputNum(this.value)">
+                                        </td>
+                                        <td><input type="button" class="num" value="9" onclick="inputNum(this.value)">
+                                        </td>
+                                        <td><input type="button" class="num symbol" value="÷"
+                                                onclick="operate(this.value)">
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td><input type="button" class="num" value="4" onclick="inputNum(this.value)">
+                                        </td>
+                                        <td><input type="button" class="num" value="5" onclick="inputNum(this.value)">
+                                        </td>
+                                        <td><input type="button" class="num" value="6" onclick="inputNum(this.value)">
+                                        </td>
+                                        <td><input type="button" class="num symbol" value="×"
+                                                onclick="operate(this.value)">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="button" class="num" value="1" onclick="inputNum(this.value)">
+                                        </td>
+                                        <td><input type="button" class="num" value="2" onclick="inputNum(this.value)">
+                                        </td>
+                                        <td><input type="button" class="num" value="3" onclick="inputNum(this.value)">
+                                        </td>
+                                        <td><input type="button" class="num symbol" value="－"
+                                                onclick="operate(this.value)">
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td><input type="button" class="num" value="0" onclick="inputNum(this.value)">
+                                        </td>
+                                        <td><input type="button" class="num" value="±" onclick="negative()"></td>
+                                        <td><input type="button" class="num" value="." onclick="inputDecimal()"></td>
+                                        <td><input type="button" class="num symbol" value="+"
+                                                onclick="operate(this.value)">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="button" class="num AC" value="AC" onclick="clearAll()"></td>
+                                        <td><input type="button" class="num delete" value="⌫" onclick="Delete()"></td>
+                                        <td><input type="button" class="num symbol" value="√" onclick="operate(this.value)"></td>
+                                        <td colspan="2"><input type="button" class="num equal" value="="
+                                                onclick="operate(this.value)"></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>

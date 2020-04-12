@@ -1,0 +1,110 @@
+body {
+    margin: 0 auto;
+}
+
+.wrap {
+    width: 350px;
+    height: 500px;
+    table-layout: fixed;
+    background: #062145;
+    border-radius: 20px;
+}
+
+.show-num-box {
+    height: 100px;
+    background: #041936;
+    border-radius: 20px 20px 0px 0px;
+}
+
+.num_table {
+    width: 350px;
+    margin: 15px auto;
+}
+
+.num_table td {
+    text-align: center;
+    width: 20%;
+}
+
+.num_table input {
+    width: 66px;
+    height: 33px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    line-height: 24px;
+}
+
+.num_table .num {
+    margin: 10px 7.7px;
+    padding: 15px;
+    height: 50px;
+    font-size: 24px;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: 0;
+    background: #062145;
+}
+
+.num_table .num:hover {
+    background: rgb(255, 193, 77);
+}
+
+.num_table .symbol,
+.num_table .equal {
+    COLOR: #00C4FF;
+    background: #041936;
+}
+
+.num_table .symbol:hover,
+.num_table .AC:hover,
+.num_table .delete:hover {
+    COLOR: #00C4FF;
+    background: #6C00FF;
+}
+
+.num_table .equal:hover {
+    background: linear-gradient(to right, #00C4FF, #6C00FF);
+    color: #00C4FF;
+}
+
+.show-num input {
+    width: 340px;
+    font-family: "Arial";
+    font-weight: bold;
+    font-size: 40px;
+    text-align: right;
+    color: #ffffff;
+    padding: 2px 5px;
+    letter-spacing: 12px;
+    background: #041936;
+    border: 0;
+    border-radius: 20px;
+}
+
+
+.tips_p {
+    float: left;
+    position: relative;
+    width: 100%;
+}
+
+.display-all {
+    position: absolute;
+    top: 3px;
+    left: 0%;
+    text-align: left;
+    width: 340px;
+    height: 20px;
+    line-height: 20px;
+    text-indent: 8px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 20px;
+    color: #00C4FF;
+    overflow: hidden;
+}
