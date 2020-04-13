@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="Modules/MyHelper.js"></script>
+    <title>LOL</title>
+    <style>
+        body{
+            background-color: #000;
+        }
+        .row{
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        .title{
+            width: 100%;
+            background-color: #000;
+            text-align: center;
+            padding: 5px 0;
+        }
+        h1, h4, h5{
+            color: #fff;
+        }
+        button{
+            background-color: #000;
+            border: 0;
+        }
+        .modal-title{
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="title">
+        <h4 style="font-style:italic">CHOOSE YOUR</h4>
+        <h1 style="font-style:italic">CHAMPION</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+
+            <template id="templateCharacter">
+                <!-- 
+                <div class="col-12 col-md-4">
+                    <div class="card">
+                        <button class="text-center">
+                            <img src="" alt="">
+                            <h5></h5>
+                        </button>
+                    </div>
+                </div>
+                 -->
+            </template>
+
+            <!-- Modal -->
+            <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="infoModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <tr>
+                                <p></p>
+                            </tr>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+    <script>
+        let row = $g('.row');
+        var template = $g('#templateCharacter');
+
+        let modalBody = $g('.modal-body');
+        let modalTitle = $g('.modal-title');
+        let tr = $c('tr');
+
+        var DataArray = [];
+        window.onload = function () {
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // load JSON
+                    DataArray = JSON.parse(this.responseText);
+                    // console.log(DataArray);
+
+                    DataArray.forEach(x => {
+                        // console.log(x);
+                        let col = $c('div');
+                        col.className = 'col-12 col-md-4 col-lg-3';
+                        let card = $c('div');
+                        card.className = 'card';
+
+                        let button = $c('button');
+                        button.className = 'text-center', 'btn-group-toggle';
+                        button.onclick = function () {
+                            $('#infoModal').modal('toggle');
+                            tr.innerHTML = '';
+                            
+                            for (let i = 0; i < Object.keys(x.Stats).length; i++) { 
+                                var p = document.createElement('p');
+                                
+                                p.innerHTML = `${Object.keys(x.Stats)[i]}: ${Object.values(x.Stats)[i]}`;
+                                tr.appendChild(p);
+                            }
+                            var p_Description = document.createElement('p');
+                            p_Description.innerHTML = `Description: ${(x.Description)}`;
+                            tr.appendChild(p_Description);
+
+
+                            modalBody.appendChild(tr);
+                            modalTitle.textContent = x.Name;
+                        };
+
+                        let img = $c('img');
+                        img.src = x.Image;
+                        let h5 = $c('h5');
+                        h5.innerHTML = (x.Name);
+                        // console.log(h5);
+
+                        button.appendChild(img);
+                        button.appendChild(h5);
+                        card.appendChild(button);
+                        col.appendChild(card);
+                        row.appendChild(col);
+                    });
+                    
+
+                } else {
+                    msg.textContent = '發⽣錯誤，HTTP response代碼：' + xhr.status;
+                }
+            }
+            xhr.open("GET", 'http://127.0.0.1:5500/LOL/LOL.json');
+            xhr.send();
+        }
+
+
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
