@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Taiwan Address</title>
+    <script src="../Modules/MyHelper.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>Taiwan Address</h1>
+        <button onclick="addThead(), addTbody()">Load ZipCode</button>
+        <div id="msg"></div>
+
+        <table>
+            <thead>
+                
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+        <template id="templateTh">
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </template> 
+
+
+        <template id="templateRow"> <!-- ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
+            <tr>                    <!--                    -->
+                <td></td>           <!--                    -->
+                <td></td>           <!-- 放進 tbody 裡的格式 -->
+                <td></td>           <!--                    -->
+            </tr>                   <!--                    -->
+        </template>                 <!-- ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ -->
+
+    </div>
+
+    <script>
+        var body = $g('body');//document.querySelector("body");
+        var table = $g("table");
+        table.classList.add("table", "table-hover");
+        table.setAttribute("border", "5");
+        var thead = $g('thead');
+        thead.classList.add("thead-dark", "text-center");
+        var tbody = $g("tbody");
+        tbody.classList.add("text-center");
+
+        var zipCode = [];
+        let zipCodeArray = '';
+        window.onload = function () {
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    //1. load JSON
+                    zipCodeArray = JSON.parse(this.responseText);
+                    // console.log(zipCodeArray);
+
+                    //2.
+                    zipCodeArray.forEach((item) => {
+                        // zipCode.push({ City: "台北市", AreaList:[{AreaName:"中正區", zipCode:"100"}] });
+                        let _city = item.CityName;
+                        let _districts = [];
+                        item.AreaList.forEach((item) => {
+                            _districts.push({ AreaName: item.AreaName, ZipCode: item.ZipCode });
+                        });
+
+                        let _cityObject = { City: _city, AreaName: _districts };
+                        zipCode.push(_cityObject);
+                    });
+                    console.log(zipCode);
+                    // debugger;
+                } else {
+                    msg.textContent = '發⽣錯誤，HTTP response代碼：' + xhr.status;
+                }
+            }
+            xhr.open("GET", 'http://127.0.0.1:5500/TaiwanAddress_JSON/TaiwanAddress/CityCountyData.json');
+            xhr.send();
+        }
+
+        function addThead() {
+            let template = $g('#templateTh').content.cloneNode(true); //要複製template樣版給其他內容用
+            let ths = template.querySelectorAll('th');
+            console.log(ths);
+
+            for(var items in zipCode[0]){
+                if(typeof zipCode[0][items] == 'string')
+                {
+                    ths[0].innerHTML = items;
+                    console.log(items);
+                }
+                else
+                {
+                    let counter = 1;
+                    for(let j in zipCode[0][items][0])
+                    {
+                        ths[counter].innerHTML = j;
+                        counter++;
+                    }
+                }
+            }
+            thead.appendChild(template);
+            
+
+                    // let template = $g('#templateTh').content.cloneNode(true); //要複製template樣版給其他內容用
+                    // let ths = template.querySelectorAll('th');
+
+                    
+                    // ths[0].innerHTML = "CityName";
+                    // ths[1].innerHTML = "AreaName";
+                    // ths[2].innerHTML = "ZipCode";
+
+                    // thead.appendChild(template);
+           
+        }
+
+        function addTbody() {
+            zipCode.forEach(x => {
+                let city = x.City;
+                x.AreaName.forEach(y => {
+                    let template = $g('#templateRow').content.cloneNode(true); //要複製template樣版給其他內容用
+                    let tds = template.querySelectorAll('td');
+
+                    tds[0].innerHTML = city;
+                    tds[1].innerHTML = y.AreaName;
+                    tds[2].innerHTML = y.ZipCode;
+
+                    tbody.appendChild(template);
+                });
+            });
+
+
+        }
+
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
