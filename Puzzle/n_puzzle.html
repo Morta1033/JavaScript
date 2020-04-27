@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Puzzle</title>
+    <style>
+        body {
+            background-color: rgba(190, 246, 253, 0.856);
+        }
+
+        .picArea {
+            width: 460px;
+            display: flex;
+            flex-wrap: wrap;
+            border: blueviolet 5px double;
+            display: none;
+        }
+
+        .picArea img {
+            width: 33.3333%;
+        }
+
+        .size {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .empty {
+            flex-grow: 1;
+        }
+
+        select {
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <canvas id="background" width="150px" height="150px" hidden></canvas>
+            <canvas id="background_4" width="112.5px" height="112.5px" hidden></canvas>
+            <div class="picArea">
+
+            </div>
+            <div class="size">
+                <select onchange="Change()">
+                    <option value="3">3 x 3</option>
+                    <option value="4">4 x 4</option>
+                </select>
+                <button id="random" onclick="Random()">開始</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var size = document.querySelector("option").value;
+        var canvas = document.getElementById("background");
+        var canvas_4 = document.getElementById("background_4");
+        var context = canvas.getContext('2d');
+        var context_4 = canvas_4.getContext('2d');
+        var imgArr = [];
+        var img = new Image();
+
+        function Change() {
+            size = document.querySelector("select").value;
+            document.querySelector('.picArea').style.display = 'flex';
+            img.src = 'images/1528956236dd1047ad248201a3fae74c.jpg';
+        }
+
+        window.onload = () => {
+            img.src = 'images/1528956236dd1047ad248201a3fae74c.jpg';
+        }
+
+        img.onload = () => {
+            imgArr = [];
+            new Promise((resolve, reject) => {
+                (() => {
+                    document.querySelector('.picArea').innerHTML = '';
+                    document.querySelector('.picArea').style.display = 'flex';
+                    // 3 x 3
+                    if (size == 3) {
+                        var n = 9;
+                        var size_num = 3;
+
+                        for (let i = 0; i < 3; i++) {
+                            for (let j = 0; j < 3; j++) {
+                                context.drawImage(img, 150 * j, 150 * i, 150, 150, 0, 0, 148, 148);
+                                imgArr.push(canvas.toDataURL());
+                                // console.log(imgArr[0]);
+                                context.clearRect(0, 0, canvas.width, canvas.height);
+                            }
+                        }
+                        // context.drawImage(img, 0, 0, 150, 150, 0, 0, 150, 150); //上左
+                        // context.drawImage(img, 150, 0, 150, 150, 150, 0, 150, 150); //上中
+                        // context.drawImage(img, 300, 0, 150, 150, 300, 0, 150, 150); //上右
+                        // context.drawImage(img, 0, 150, 150, 150, 0, 150, 150, 150); //中左
+                        // context.drawImage(img, 150, 150, 150, 150, 150, 150, 150, 150); //中中
+                        // context.drawImage(img, 300, 150, 150, 150, 300, 150, 150, 150); //中右
+                        // context.drawImage(img, 0, 300, 150, 150, 0, 300, 150, 150); //下左
+                        // context.drawImage(img, 150, 300, 150, 150, 150, 300, 150, 150); //下中
+                        // context.drawImage(img, 300, 300, 150, 150, 300, 300, 150, 150); //下右
+                    }
+                    // 4 x 4
+                    else if (size == 4) {
+                        var n = 16;
+                        var size_num = 4;
+
+                        for (let i = 0; i < 4; i++) {
+                            for (let j = 0; j < 4; j++) {
+                                context_4.drawImage(img, 112.5 * j, 112.5 * i, 112.5, 112.5, 0, 0, 109.5, 109.5);
+                                imgArr.push(canvas_4.toDataURL());
+                                // console.log(imgArr[0]);
+                                context_4.clearRect(0, 0, canvas_4.width, canvas_4.height);
+                            }
+                        }
+                    }
+
+                    imgArr = imgArr.map((x, y) => {
+                        if (y == imgArr.length - 1) {
+                            return ''; //最後一張不顯示
+                        }
+                        return x;
+                    });
+
+                    var position = {};
+
+                    for (let k = 0; k < n; k++) {
+                        let imgElement = document.createElement("img");
+                        imgElement.className = `img_${k}`;
+                        imgElement.src = k < n - 1 ? imgArr[k] : "";
+                        imgElement.setAttribute('data-blank', (k < n - 1 ? '' : 1));
+
+                        if (k >= n - 1) {
+                            imgElement.classList.add('empty');
+                        }
+                        if (size == 4) {
+                            imgElement.style.width = '25%';
+                        }
+
+                        let picArea = document.querySelector(".picArea");
+                        picArea.appendChild(imgElement);
+
+                        let row = parseInt(k / size_num);
+                        let col = k % size_num;
+                        position[k] = { row: row, col: col };
+                        // console.log(position[k]);
+
+                        imgElement.addEventListener('click', (e) => {
+                            // alert('is click');
+                            let imgItem = document.querySelectorAll(".picArea img");
+                            // console.log(Array.isArray(imgItem));
+                            let i = Array.from(imgItem).indexOf(e.target);
+                            // console.log(i);
+                            let check = getNearPos(i).filter(x => {
+                                return imgItem[x].getAttribute('data-blank') == '1';
+                            });
+                            // console.log('test: ', i, getNearPos(i), check);
+
+                            imgItem[check].src = imgItem[i].src;
+                            imgItem[i].src = ' ';
+
+                            imgItem[i].setAttribute('data-blank', 1);
+                            imgItem[check].setAttribute('data-blank', 0);
+                        });
+                        // console.log(imgElement);
+                    }
+
+                    function getNearPos(i) {
+                        var location = [];
+                        var row = position[i].row, col = position[i].col;
+                        if (row - 1 >= 0) //上
+                            location.push((row - 1) * size_num + col);
+                        if (row + 1 < size_num) //下
+                            location.push((row + 1) * size_num + col);
+                        if (col - 1 >= 0) //左
+                            location.push((row) * size_num + col - 1);
+                        if (col + 1 < size_num) //右
+                            location.push((row) * size_num + col + 1);
+                        return location;
+                    }
+                    resolve('sucess');
+                })();
+            }).then(x => {
+                document.querySelector('#random').disabled = false;
+            });
+        }
+
+        function Random() {
+            var imgElement = document.querySelectorAll(".picArea img");
+            let ran = []; //random後的圖片
+
+            if (size == 3) {
+                var n = 9;
+            }
+            else if (size == 4) {
+                var n = 16;
+            }
+
+            let j = n;
+            for (let i = 0; i < n; i++) {
+                let k = Math.floor(Math.random() * j);
+                ran.push(imgArr[k]);
+                imgArr = imgArr.filter(x => x !== imgArr[k]);
+                // console.log(imgArr);
+                imgElement[i].src = ran[i];
+                imgElement[i].setAttribute('data-blank', (!ran[i] ? 1 : 0));
+                j--;
+            }
+            imgArr = ran;
+        }
+        document.querySelector('#random').disabled = true;
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+</html>
