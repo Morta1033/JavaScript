@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Calendar</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        body {
+            background: linear-gradient(to right, rgb(176, 216, 228), rgb(219, 193, 255));
+        }
+
+        .calendar {
+            box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            text-align: center;
+            height: 150px;
+        }
+
+        .Year {
+            font-size: 20px;
+        }
+
+        .title .prev-next {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .title .prev-next a {
+            font-size: 40px;
+            color: #f7b;
+            text-decoration: none;
+        }
+
+        .write {
+            text-align: right;
+            margin: 0 50px;
+        }
+
+        .body-list ul {
+            width: 100%;
+            font-family: arial;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .body-list ul li {
+            width: 14.28%;
+            height: 36px;
+            line-height: 36px;
+            list-style-type: none;
+            display: block;
+            box-sizing: border-box;
+            float: left;
+            text-align: center;
+        }
+
+        .pastDays {
+            color: #bebaba;
+        }
+
+        .futureDays {
+            color: #565656;
+        }
+
+        .Month,
+        .Year {
+            color: #11cccc;
+        }
+
+        .today_box {
+            border: 1px solid #d2fcbc;
+            background: rgba(197, 231, 241, .4);
+        }
+
+        #days li {
+            height: 135px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .eventArea {
+            width: 100%;
+            overflow: auto;
+            flex-grow: 1;
+        }
+
+        .eventArea::-webkit-scrollbar {
+            /* 整個滾動條 */
+            width: 8px;
+            height: 8px;
+
+            /* background-clip: 設置元素的背景（背景圖片或顏色）是否延伸到邊框下面 */
+            background-clip: padding-box;
+            background-color: rgb(196, 231, 178);
+            border: rgba(95, 182, 49, 0) 2px solid;
+        }
+
+        .eventArea::-webkit-scrollbar-thumb {
+            /* 可拖動條 */
+            background-clip: padding-box;
+            background-color: rgb(129, 202, 89);
+            border: rgba(95, 182, 49, 0) 1px solid;
+        }
+
+        .eventArea::-webkit-scrollbar-thumb:hover {
+            background-clip: padding-box;
+            border: rgba(95, 182, 49, 1) 8px solid;
+        }
+        
+        span {
+            font-size: 20px;
+        }
+        p {
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+        p:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="calendar">
+                    <div class="title">
+                        <h1 class="Month" id="calendar-title">Month</h1>
+                        <h2 class="Year" id="calendar-year">Year</h2>
+                        <div class="prev-next">
+                            <a href="" id="prev">⇠</a> <!-- 上個月 -->
+                            <a href="" id="next">⇢</a> <!-- 下個月 -->
+                        </div>
+                    </div>
+                    <div class="write">
+                        <!-- <input type="text" class="writeEvent"> -->
+                        <!-- <button class="addEvent" onclick="saveEvent()">新增</button> -->
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#AddEvent">
+                            新增活動
+                        </button>
+                    </div>
+                    <div class="body">
+                        <div class="body-list">
+                            <ul>
+                                <li>SUN</li>
+                                <li>MON</li>
+                                <li>TUE</li>
+                                <li>WED</li>
+                                <li>THU</li>
+                                <li>FRI</li>
+                                <li>SAT</li>
+                            </ul>
+                        </div>
+                        <div class="futureDays body-list">
+                            <ul id="days">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <!-- 修改Modal -->
+            <div class="modal fade" id="ChangeEvent" tabindex="-1" role="dialog" aria-labelledby="ChangEventTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">修改 / 刪除活動</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-2">
+                                        日期 :
+                                    </div>
+                                    <div class="col-10">
+                                        <input id="dateChange" type="date">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    &nbsp;
+                                </div>
+                                <div class="row">
+                                    <div class="col-2">
+                                        時間 :
+                                    </div>
+                                    <div class="col-10">
+                                        <input id="timeChange" type="time" value="00:00">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    &nbsp;
+                                </div>
+                                <div class="row">
+                                    <div class="col-2">
+                                        內容 :
+                                    </div>
+                                    <div class="col-10">
+                                        <input id="thingChange">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    &nbsp;
+                                </div>
+                                <div class="row">
+                                    <div class="col-2">
+                                        顏色 :
+                                    </div>
+                                    <div class="col-10">
+                                        <input type="color" value="#ff0000" id="colorWellChange">
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="delete" data-dismiss="modal">刪除</button>
+                            <button type="button" class="btn btn-primary" id="update" data-dismiss="modal">修改</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 新增Modal -->
+            <div class="modal fade" id="AddEvent" tabindex="-1" role="dialog" aria-labelledby="AddEventTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="AddEventLongTitle">新增活動</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-2">
+                                        日期 :
+                                    </div>
+                                    <div class="col-10">
+                                        <input id="date" type="date">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    &nbsp;
+                                </div>
+                                <div class="row">
+                                    <div class="col-2">
+                                        時間 :
+                                    </div>
+                                    <div class="col-10">
+                                        <input id="time" type="time" value="00:00">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    &nbsp;
+                                </div>
+                                <div class="row">
+                                    <div class="col-2">
+                                        內容 :
+                                    </div>
+                                    <div class="col-10">
+                                        <input id="thing">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    &nbsp;
+                                </div>
+                                <div class="row">
+                                    <div class="col-2">
+                                        顏色 :
+                                    </div>
+                                    <div class="col-10">
+                                        <input type="color" value="#ff0000" id="colorWell">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="save" data-dismiss="modal">儲存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="Calendar.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
